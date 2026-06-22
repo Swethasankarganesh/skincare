@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkinCare Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Landing Page -->
+    <div class="landing-page" id="landing-page">
+        <div class="animated-bg"></div>
+        <div class="landing-content">
+            <h1 class="animated-title">Welcome to SkinCare Assistant</h1>
+            <p class="animated-subtitle">Your personal skincare advisor</p>
+            <button onclick="showAuthModal()" class="get-started-btn pulse">Get Started</button>
+        </div>
+    </div>
+
+    <!-- Home Page with Chat -->
+    <div class="home-page hidden" id="home-page">
+        <nav>
+            <div class="logo">SkinCare <span class="highlight">Assistant</span></div>
+            <div class="auth-buttons" id="auth-buttons">
+                <button onclick="showAuthModal('signin')" class="signin-btn">Sign In</button>
+                <button onclick="showAuthModal('signup')" class="signup-btn">Sign Up</button>
+            </div>
+            <div class="user-profile hidden" id="user-profile">
+                <img src="https://via.placeholder.com/40" alt="Profile" onclick="toggleUserDetails()">
+                <div class="user-details" id="user-details">
+                    <h3 id="profile-name">User Name</h3>
+                    <p id="profile-email">user@example.com</p>
+                    <button onclick="viewDashboard()">Dashboard</button>
+                    <button onclick="signOut()">Sign Out</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Hi, how can I suggest you?</h2>
+                <div class="progress-container">
+                    <div class="progress-text">Progress: <span id="progress-count">0</span>/5</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Type your message..." disabled>
+                <button onclick="sendMessage()" id="send-btn" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div class="dashboard-page hidden" id="dashboard-page">
+        <nav>
+            <div class="logo">SkinCare <span class="highlight">Assistant</span></div>
+            <div class="user-profile">
+                <img src="https://via.placeholder.com/40" alt="Profile" onclick="toggleDashboardDetails()">
+                <div class="user-details" id="dashboard-details">
+                    <h3 id="dashboard-name">User Name</h3>
+                    <p id="dashboard-email">user@example.com</p>
+                    <button onclick="returnToChat()">Return to Chat</button>
+                    <button onclick="signOut()">Sign Out</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="dashboard-sidebar">
+                <ul>
+                    <li class="active" onclick="switchDashboardTab('profile')">Profile</li>
+                    <li onclick="switchDashboardTab('history')">Chat History</li>
+                    <li onclick="switchDashboardTab('recommendations')">Recommendations</li>
+                    <li id="admin-tab" class="hidden" onclick="switchDashboardTab('admin')">Admin Panel</li>
+                </ul>
+            </div>
+            <div class="dashboard-content">
+                <div id="profile-tab" class="dashboard-tab">
+                    <h2>Your Profile</h2>
+                    <div class="profile-info">
+                        <div class="profile-field">
+                            <label>Name:</label>
+                            <span id="profile-name-value">User Name</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Email:</label>
+                            <span id="profile-email-value">user@example.com</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Account Type:</label>
+                            <span id="profile-type-value">Free</span>
+                        </div>
+                        <div class="profile-field">
+                            <label>Messages Remaining:</label>
+                            <span id="profile-messages-value">5</span>
+                        </div>
+                        <button class="upgrade-btn">Upgrade to Premium</button>
+                    </div>
+                </div>
+                <div id="history-tab" class="dashboard-tab hidden">
+                    <h2>Chat History</h2>
+                    <div class="chat-history" id="chat-history-container">
+                        <!-- Chat history will be added here -->
+                    </div>
+                </div>
+                <div id="recommendations-tab" class="dashboard-tab hidden">
+                    <h2>Your Skincare Recommendations</h2>
+                    <div class="recommendations-container" id="recommendations-container">
+                        <p>Complete your skincare consultation to receive personalized recommendations.</p>
+                    </div>
+                </div>
+                <div id="admin-tab-content" class="dashboard-tab hidden">
+                    <h2>Admin Panel</h2>
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <h3>Total Users</h3>
+                            <p>124</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Premium Users</h3>
+                            <p>37</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Messages Today</h3>
+                            <p>1,245</p>
+                        </div>
+                    </div>
+                    <div class="admin-users">
+                        <h3>Recent Users</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>john@example.com</td>
+                                    <td>Free</td>
+                                    <td><button class="small-btn">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td>jane@example.com</td>
+                                    <td>Premium</td>
+                                    <td><button class="small-btn">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Alex Johnson</td>
+                                    <td>alex@example.com</td>
+                                    <td>Free</td>
+                                    <td><button class="small-btn">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('signin')" id="signin-tab">Sign In</button>
+                <button class="auth-tab" onclick="switchTab('signup')" id="signup-tab">Sign Up</button>
+            </div>
+            
+            <form id="signin-form" class="auth-form">
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="btn-animated">Sign In</button>
+            </form>
+
+            <form id="signup-form" class="auth-form hidden">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <select required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="password" placeholder="Create Password" required>
+                <button type="submit" class="btn-animated">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Premium Modal -->
+    <div class="premium-modal hidden" id="premium-modal">
+        <div class="premium-container">
+            <div class="sparkle-bg"></div>
+            <h2>Upgrade to Premium</h2>
+            <p id="premium-message">You've reached your free message limit.</p>
+            <p>Upgrade to premium for unlimited messages and personalized skincare recommendations!</p>
+            <button class="premium-btn">Purchase Premium</button>
+            <button class="close-premium" onclick="closePremiumModal()">Maybe Later</button>
+        </div>
+    </div>
+
+    <!-- Final Recommendation Modal -->
+    <div class="recommendation-modal hidden" id="recommendation-modal">
+        <div class="recommendation-container">
+            <div class="sparkle-bg"></div>
+            <h2>Your Personalized Skincare Routine</h2>
+            <div id="final-recommendation" class="final-recommendation"></div>
+            <div class="recommendation-actions">
+                <button class="save-btn" onclick="saveRecommendation()">Save to Profile</button>
+                <button class="close-btn" onclick="closeRecommendationModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
